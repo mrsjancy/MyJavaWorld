@@ -1,6 +1,8 @@
 Microservices 
 ------------------------------------------------------------------
 
+    https://github.com/avamsykiran/Microservices_29Nov21_10Dec21_09001100.git
+
     Pre-Requisites
     --------------------------------
         Web MVC -       Servlet and JSP
@@ -27,7 +29,6 @@ Microservices
             a. record his monthly transactions
             b. modify a recorded transaction
             c. retrive the monthly expenditure analysis / report
-
 
         Decomposition By Bussines Capbilitites & Sub-Domain
 
@@ -60,7 +61,6 @@ Microservices
 
                             AngularApp / AndriodApp /ReactApp..etc
                                             |↑
-                                            ||
                                             ↓|
                                 API GATEWAY SERVICE / EDGE SERVICE
                                         localhost:9999
@@ -70,8 +70,89 @@ Microservices
                     ↑↓                          ↑↓                                         ↑↓
             User-Management-Service   <--->  Txn-Management-Service    <---->   Report-Management-Service
                 localhost:9100                  localhost:9200                      localhost:9300
-                         ↑↓                                                             ↓↑
-                         -----------------------------------------------------------------                                          
+             ↑↓          ↑↓                         ↓↑                                  ↓↑
+           umsDB         ||                        tmsDB                                ||
+                         -----------------------------------------------------------------
             
                 
-             
+        Log Aggreatation,Performence Metrics and Distributed Tracing and Health Check Pattern 
+
+                             AngularApp / AndriodApp /ReactApp..etc
+                                            |↑
+                                            ↓|
+                            API GATEWAY SERVICE / EDGE SERVICE
+                                     localhost:9999
+                                            |↑
+                                            ↓|
+                     -------------------------------------------------------------------------
+                     ↑↓                          ↑↓                                         ↑↓
+            User-Management-Service   <--->  Txn-Management-Service    <---->   Report-Management-Service
+                localhost:9100                  localhost:9200                      localhost:9300
+             ↑↓     |    ↑↓                         ↓↑                                  ↓↑    |    
+           umsDB    |    ||                        tmsDB                                ||    |    
+                    |    -----------------------------------------------------------------    |    
+                    ↓                               ↓                                         ↓    
+        |------------------[Logs / Performence Metrics / Req Traces / Health Checks ]----------   
+        |         
+        |         
+        ↓                                                                          
+    DT Service                                                                     
+    localhost:9411                                                                     
+
+
+    External Configuaration
+
+                             AngularApp / AndriodApp /ReactApp..etc
+                                            |↑
+                                            ↓|
+                            API GATEWAY SERVICE / EDGE SERVICE
+                                     localhost:9999
+                                            |↑
+                                            ↓|
+                     -------------------------------------------------------------------------
+                     ↑↓                          ↑↓                                         ↑↓
+            User-Management-Service   <--->  Txn-Management-Service    <---->   Report-Management-Service
+                localhost:9100                  localhost:9200                      localhost:9300
+             ↑↓   ↑ |    ↑↓                         ↓↑                                  ↓↑    |    ↑
+           umsDB  | |    ||                        tmsDB                                ||    |    |
+                  | |    -----------------------------------------------------------------    |    |
+                  | ↓                               ↓                                         ↓    |
+        |---------|--------[Logs / Performence Metrics / Req Traces / Health Checks ]------------  |  
+        |         |                                   ↑                                            |            
+        |         ----------------------------------------------------------------------------------
+        ↓                                                                                   ↑       
+    DT Service                                                                         Config Service
+    localhost:9411                                                                     localhost:9797
+                                                                                            ↑
+                                                                                       Git Repo/SVM Repo
+                                                                                        [all config files]
+
+   Discovery Service
+
+                             AngularApp / AndriodApp /ReactApp..etc
+                                            |↑
+                                            ↓|
+                            API GATEWAY SERVICE / EDGE SERVICE   <--------->        Discovery Service
+                                     localhost:9999                                   localhost:9000
+                                            |↑                                                  ↑↓
+                ------------[register self and discover the peer microservice]--------------------
+                ↑↓                          ↓|     ↑↓                                           ↑↓
+                ||    ------------------------------------------------------------------------- ||
+                ||    ↑↓                          ↑↓                                         ↑↓ ||
+            User-Management-Service   <--->  Txn-Management-Service    <---->   Report-Management-Service
+                localhost:9101                  localhost:9201                      localhost:9301
+                localhost:9102                  localhost:9202                  
+                localhost:9103                 
+             ↑↓   ↑ |    ↑↓                         ↓↑                                  ↓↑    |    ↑
+           umsDB  | |    ||                        tmsDB                                ||    |    |
+                  | |    -----------------------------------------------------------------    |    |
+                  | ↓                               ↓                                         ↓    |
+        |---------|--------[Logs / Performence Metrics / Req Traces / Health Checks ]------------  |  
+        |         |                                   ↑                                            |            
+        |         ----------------------------------------------------------------------------------
+        ↓                                                                                   ↑       
+    DT Service                                                                         Config Service
+    localhost:9411                                                                     localhost:9797
+                                                                                            ↑
+                                                                                       Git Repo/SVM Repo
+                                                                                        [all config files]                                                                                       
