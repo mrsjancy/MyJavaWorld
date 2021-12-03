@@ -155,4 +155,63 @@ Microservices
     localhost:9411                                                                     localhost:9797
                                                                                             ↑
                                                                                        Git Repo/SVM Repo
-                                                                                        [all config files]                                                                                       
+                                                                                        [all config files]                                                    
+Deve Platforma and Tools
+---------------------------------------------------------------------
+
+                                      Rest Api Client
+                                        [PostMan]
+                                            |↑
+                                            ↓|
+                            API GATEWAY SERVICE / EDGE SERVICE   <--------->        Discovery Service
+                                      Spring Boot                                     Spring Boot
+                                      Spring Cloud API Gateway                        Netflix Eureka Server
+                                      Spring Discovery Client 
+                                      Spring Cloud Config Client
+                                      Spring Cloud loadbalancer  
+                                     localhost:9999                                   localhost:9000
+                                            |↑                                                  ↑↓
+                ------------[register self and discover the peer microservice]--------------------
+                ↑↓                          ↓|     ↑↓                                           ↑↓
+                ||    ------------------------------------------------------------------------- ||
+                ||    ↑↓                          ↑↓                                         ↑↓ ||
+            User-Management-Service   <--->  Txn-Management-Service    <---->   Report-Management-Service
+                Spring Boot                     Spring Boot                     Spring Boot
+                Spring Discovery Client         Spring Discovery Client         Spring Discovery Client
+                Open Feign (Feign Client)       Open Feign (Feign Client)       Open Feign (Feign Client)       
+                Spring Cloud Load balancer      Spring Cloud Load balancer      Spring Cloud Load balancer
+                Spring Cloud Resilieance4j      Spring Cloud Resilieance4j      Spring Cloud Resilieance4j
+                Spring Boot Actuator            Spring Boot Actuator            Spring Boot Actuator
+                Spring Cloud Sleuth             Spring Cloud Sleuth             Spring Cloud Sleuth
+                Spring Cloud Config Client      Spring Cloud Config Client      Spring Cloud Config Client
+                Spring Web (REST)               Spring Web (REST)               Spring Web (REST)           
+                Spring Data JPA                 Spring Data JPA
+                MySQL ConnectorJ                MySQL ConnectorJ
+
+                localhost:9101                  localhost:9201                      localhost:9301
+                localhost:9102                  localhost:9202                  
+                localhost:9103                 
+             ↑↓   ↑ |    ↑↓                         ↓↑                                  ↓↑    |    ↑
+           umsDB  | |    ||                        tmsDB                                ||    |    |
+                  | |    -----------------------------------------------------------------    |    |
+                  | ↓                               ↓                                         ↓    |
+        |---------|--------[Logs / Performence Metrics / Req Traces / Health Checks ]------------  |  
+        |         |                                   ↑                                            |            
+        |         ----------------------------------------------------------------------------------
+        ↓                                                                                   ↑       
+    DT Service                                                                         Config Service
+    zipkin-server.jar                                                                   Spring Boot
+                                                                                        Spring Cloud Config Server
+    localhost:9411                                                                     localhost:9797
+                                                                                            ↑
+                                                                                       Git Repo/SVM Repo
+                                                                                        [all config files]                      
+
+    Case Study Implementation
+    --------------------------------------------------
+
+    Setep 1:    Develop the microsoervices and provide inter-service communication
+
+        user-management-service
+        txn-management-service
+        report-management-service
